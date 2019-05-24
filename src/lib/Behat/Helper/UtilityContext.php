@@ -26,6 +26,8 @@ class UtilityContext extends MinkContext
     public function waitUntilElementIsVisible(string $cssSelector, int $timeout = 5, TraversableElement $baseElement = null): void
     {
         try {
+            if($baseElement !== null) printf('xpath: ' . $baseElement->getXpath() . ' | ');
+
             $this->waitUntil($timeout, function () use ($cssSelector, $baseElement) {
                 $baseElement = $baseElement ?? $this->getSession()->getPage();
 
