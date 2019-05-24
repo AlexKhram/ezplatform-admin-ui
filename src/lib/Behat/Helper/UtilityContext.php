@@ -29,7 +29,7 @@ class UtilityContext extends MinkContext
             if($baseElement !== null) printf('xpath: ' . $baseElement->getXpath() . ' | ');
 
             $this->waitUntil($timeout, function () use ($cssSelector, $baseElement) {
-                $baseElement = (!$baseElement) ? $this->getSession()->getPage() : $this->findElement($baseElement->getXpath());
+                $baseElement = (!$baseElement) ? $this->getSession()->getPage() : $this->getSession()->getPage()->find('xpath', $baseElement->getXpath());
 
                 $element = $baseElement->find('css', $cssSelector);
 
@@ -55,7 +55,7 @@ class UtilityContext extends MinkContext
 
         $elements = $this->waitUntil(10,
             function () use ($locator, $baseElement) {
-                $baseElement = (!$baseElement) ? $this->getSession()->getPage() : $this->findElement($baseElement->getXpath());
+                $baseElement = (!$baseElement) ? $this->getSession()->getPage() : $this->getSession()->getPage()->find('xpath', $baseElement->getXpath());
 
                 $elements = $baseElement->findAll('css', $locator);
                 foreach ($elements as $element) {
@@ -227,7 +227,7 @@ class UtilityContext extends MinkContext
         try {
             return $this->waitUntil($timeout,
                 function () use ($selector, $baseElement) {
-                    $baseElement = (!$baseElement) ? $this->getSession()->getPage() : $this->findElement($baseElement->getXpath());
+                    $baseElement = (!$baseElement) ? $this->getSession()->getPage() : $this->getSession()->getPage()->find('xpath', $baseElement->getXpath());
 
                     return $baseElement->find('css', $selector);
                 });
