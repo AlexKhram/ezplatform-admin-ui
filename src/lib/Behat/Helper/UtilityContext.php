@@ -29,7 +29,7 @@ class UtilityContext extends MinkContext
             if($baseElement !== null) printf('xpath: ' . $baseElement->getXpath() . ' | ');
 
             $this->waitUntil($timeout, function () use ($cssSelector, $baseElement) {
-                $baseElement = $baseElement ?? $this->getSession()->getPage();
+                $baseElement = (!$baseElement) ? $this->getSession()->getPage() : $this->findElement($baseElement->getXpath());
 
                 $element = $baseElement->find('css', $cssSelector);
 
@@ -55,6 +55,8 @@ class UtilityContext extends MinkContext
 
         $elements = $this->waitUntil(10,
             function () use ($locator, $baseElement) {
+                $baseElement = (!$baseElement) ? $this->getSession()->getPage() : $this->findElement($baseElement->getXpath());
+
                 $elements = $baseElement->findAll('css', $locator);
                 foreach ($elements as $element) {
                     // An exception may be thrown if the element is not valid/attached to DOM.
@@ -222,11 +224,11 @@ class UtilityContext extends MinkContext
      */
     public function findElement(string $selector, int $timeout = 5, TraversableElement $baseElement = null): NodeElement
     {
-        $baseElement = $baseElement ?? $this->getSession()->getPage();
-
         try {
             return $this->waitUntil($timeout,
                 function () use ($selector, $baseElement) {
+                    $baseElement = (!$baseElement) ? $this->getSession()->getPage() : $this->findElement($baseElement->getXpath());
+
                     return $baseElement->find('css', $selector);
                 });
         } catch (Exception $e) {
@@ -268,7 +270,7 @@ class UtilityContext extends MinkContext
     public function waitUntilElementDisappears(string $cssSelector, int $timeout): void
     {
         try {
-            $this->waitUntil($timeout, function () use ($cssSelector, $timeout) {
+            $this->waitUntil($timeout, function () use ($cssSelector) {
                 return !$this->isElementVisible($cssSelector, 1);
             });
         } catch (Exception $e) {
