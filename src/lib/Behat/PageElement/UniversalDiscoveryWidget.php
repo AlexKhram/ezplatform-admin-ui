@@ -27,6 +27,7 @@ class UniversalDiscoveryWidget extends Element
             'cancelButton' => '.m-ud__action--cancel',
             'selectContentButton' => '.c-select-content-button',
             'elementSelector' => '.c-finder-tree-branch:nth-of-type(%d) .c-finder-tree-leaf',
+            'certainElementSelector' => '.c-finder-tree-branch:nth-of-type(%d) .c-finder-tree-leaf(%d)',
             'branchLoadingSelector' => '.c-finder-tree-leaf--loading',
             'previewName' => '.c-meta-preview__name',
             'treeBranch' => '.c-finder-tree-branch:nth-child(%d)',
@@ -57,12 +58,14 @@ class UniversalDiscoveryWidget extends Element
         if ($this->isMultiSelect()) {
             for ($i = 0; $i < 3; ++$i) {
                 try {
-                    $itemToSelect = $this->context->getElementByText($expectedContentName, sprintf($this->fields['elementSelector'], $depth));
+                    $itemToSelectIndex = $this->context->getElementPositionByText($expectedContentName, sprintf($this->fields['elementSelector'], $depth));
+                    $itemToSelectLocator = sprintf($this->fields['certainElementSelector'], $depth, $itemToSelectIndex);
+                    $itemsSelectButtonLocator = sprintf('%s %s', $itemToSelectLocator, $this->fields['selectContentButton']);
 
                     $this->context->findElement($this->fields['tabSelector'])->mouseOver();
-                    $itemToSelect->mouseOver();
-                    $this->context->waitUntilElementIsVisible($this->fields['selectContentButton'], $this->defaultTimeout, $itemToSelect);
-                    $this->context->findElement($this->fields['selectContentButton'], $this->defaultTimeout, $itemToSelect)->click();
+                    $this->context->findElement($itemToSelectLocator)->mouseOver();
+                    $this->context->waitUntilElementIsVisible($itemsSelectButtonLocator, $this->defaultTimeout);
+                    $this->context->findElement($itemsSelectButtonLocator, $this->defaultTimeout)->click();
                     break;
                 } catch (\Exception $e) {
                     if ($i === 2) {
