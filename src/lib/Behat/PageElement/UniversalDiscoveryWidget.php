@@ -27,7 +27,7 @@ class UniversalDiscoveryWidget extends Element
             'cancelButton' => '.m-ud__action--cancel',
             'selectContentButton' => '.c-select-content-button',
             'elementSelector' => '.c-finder-tree-branch:nth-of-type(%d) .c-finder-tree-leaf',
-            'certainElementSelector' => '.c-finder-tree-branch:nth-of-type(%d) .c-finder-tree-leaf(%d)',
+            'certainElementSelector' => '.c-finder-tree-branch:nth-of-type(%d) .c-finder-tree-leaf:nth-of-type(%d)',
             'branchLoadingSelector' => '.c-finder-tree-leaf--loading',
             'previewName' => '.c-meta-preview__name',
             'treeBranch' => '.c-finder-tree-branch:nth-child(%d)',
